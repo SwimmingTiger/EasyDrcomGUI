@@ -2,7 +2,7 @@
 GUI Wrapper for **[EasyDrcom](https://github.com/coverxit/EasyDrcom)**, which is a 3rd Party Dr.COM Client for HITwh.
 
 ## 通用版 EasyDrcomGUI，简单配置后就可以适用于不同的学校
-* Windows版：v1.8，[点此下载](https://github.com/coverxit/EasyDrcomGUI/blob/master/Windows/EasyDrcomGUI_v1.7_For_Windows_XP_SP3_or_higher.zip?raw=true)
+* Windows版：v1.8，[点此下载](https://raw.githubusercontent.com/SwimmingTiger/EasyDrcomGUI/Win32/%E4%B8%8B%E8%BD%BD/EasyDrcomGUI.exe)
 * 其他版本还没有编译
 
 ### 如何使用？
