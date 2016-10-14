@@ -16,6 +16,11 @@
 
 #pragma once
 
+#define DEFAULT_ALIVE_SERVER_IP "172.16.192.111" //默认心跳服务器IP
+#define DEFAULT_ALIVE_SERVER_PORT "61440" //默认心跳服务器的端口
+#define DEFAULT_ALIVE_CLIENT_NAME "EasyDrcomGUI" //默认客户端名（心跳包相关）
+#define DEFAULT_ALIVE_CLIENT_VERSION "for Win32, Core v0.9" //默认客户端版本（心跳包相关）
+
 #define DECLARE_THREAD_OBJECT(theClass)				\
 	template <typename T>							\
 	class theClass : public CThread {				\
@@ -158,6 +163,10 @@ public:
 	std::map<CString, CString> m_mapNIC;
 
 	CString m_szStoredNIC, m_szStoredNICDescription, m_szStoredUserName, m_szStoredPassWord, m_szStoredIP, m_szStoredMAC;
+	CString m_szStoredAliveServerIP; //心跳服务器的IP
+	int m_nStoredAliveServerPort; //心跳服务器的端口
+	CString m_szStoredAliveClientName; //客户端名（心跳包相关）
+	CString m_szStoredAliveClientVersion; //客户端版本（心跳包相关）
 
 	bool m_bKeepAliveFail;
 	CEvent m_evtKeepAliveFirstTry, m_evtKeepAlive;

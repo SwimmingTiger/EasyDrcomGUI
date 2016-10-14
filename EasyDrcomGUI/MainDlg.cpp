@@ -111,7 +111,7 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	version.Format(_T("EasyDrcomGUI For Win32, v%d.%d"), HIWORD(lpFfi->dwFileVersionMS), LOWORD(lpFfi->dwFileVersionMS));
 
 	SYS_LOG_INFO(std::string(CT2CA(version)) << std::endl);
-	SYS_LOG_INFO("Code by Shindo, build on " __DATE__ " " __TIME__ << std::endl);
+	SYS_LOG_INFO("Code by Shindo & SwimmingTiger, build on " __DATE__ " " __TIME__ << std::endl);
 
 	// fetch nic list
 	SYS_LOG_INFO("Attempt to load NIC list...");
@@ -193,6 +193,56 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 		dwLen = GetPrivateProfileString(_T("General"), _T("WorkDist.PassWord"), NULL, m_szStoredPassWord.GetBufferSetLength(MAX_PATH + 1), MAX_PATH, m_szConfPath);
 		m_szStoredPassWord.ReleaseBuffer(dwLen);
 	}
+
+	//不区分教学区还是生活区的配置
+	{
+		DWORD dwLen;
+
+		//心跳服务器IP
+		dwLen = GetPrivateProfileString(_T("General"), _T("Common.AliveServerIP"), NULL, m_szStoredAliveServerIP.GetBufferSetLength(MAX_PATH + 1), MAX_PATH, m_szConfPath);
+		m_szStoredAliveServerIP.ReleaseBuffer(dwLen);
+
+		if (m_szStoredAliveServerIP.IsEmpty()) {
+			m_szStoredAliveServerIP = DEFAULT_ALIVE_SERVER_IP;
+			WritePrivateProfileString(_T("General"), _T("Common.AliveServerIP"), m_szStoredAliveServerIP, m_szConfPath);
+		}
+
+		//心跳服务器端口
+		CString szAliveServerPort;
+		dwLen = GetPrivateProfileString(_T("General"), _T("Common.AliveServerPort"), NULL, szAliveServerPort.GetBufferSetLength(MAX_PATH + 1), MAX_PATH, m_szConfPath);
+		szAliveServerPort.ReleaseBuffer(dwLen);
+
+		if (szAliveServerPort.IsEmpty()) {
+			szAliveServerPort = DEFAULT_ALIVE_SERVER_PORT;
+			WritePrivateProfileString(_T("General"), _T("Common.AliveServerPort"), szAliveServerPort, m_szConfPath);
+		}
+
+		m_nStoredAliveServerPort = _ttoi(szAliveServerPort);
+
+		if (m_nStoredAliveServerPort < 1 || m_nStoredAliveServerPort > 65535) {
+			MessageBox(_T("“心跳服务器端口”（Common.AliveServerPort）应为 1 - 65535 之间的数字。\n\n请打开 EasyDrcom.conf 进行更正。"), _T("配置文件错误"), MB_ICONERROR);
+			SYS_LOG_ERR("EasyDrcom.conf parse error, Common.AliveServerPort = " << m_nStoredAliveServerPort << ", exit." << std::endl);
+			exit(255);
+		}
+
+		//客户端名称（心跳包相关）
+		dwLen = GetPrivateProfileString(_T("General"), _T("Common.AliveClientName"), NULL, m_szStoredAliveClientName.GetBufferSetLength(MAX_PATH + 1), MAX_PATH, m_szConfPath);
+		m_szStoredAliveClientName.ReleaseBuffer(dwLen);
+
+		if (m_szStoredAliveClientName.IsEmpty()) {
+			m_szStoredAliveClientName = DEFAULT_ALIVE_CLIENT_NAME;
+			WritePrivateProfileString(_T("General"), _T("Common.AliveClientName"), m_szStoredAliveClientName, m_szConfPath);
+		}
+
+		//客户端版本（心跳包相关）
+		dwLen = GetPrivateProfileString(_T("General"), _T("Common.AliveServerVersion"), NULL, m_szStoredAliveClientVersion.GetBufferSetLength(MAX_PATH + 1), MAX_PATH, m_szConfPath);
+		m_szStoredAliveClientVersion.ReleaseBuffer(dwLen);
+
+		if (m_szStoredAliveClientVersion.IsEmpty()) {
+			m_szStoredAliveClientVersion = DEFAULT_ALIVE_CLIENT_VERSION;
+			WritePrivateProfileString(_T("General"), _T("Common.AliveServerVersion"), m_szStoredAliveClientVersion, m_szConfPath);
+		}
+	}
 	
 	// we'll print later in connect
 	/*CT2CA ansiStoredNIC(m_szStoredNIC);
@@ -252,7 +302,7 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	LocalFree(pVersion);
 
 	// set build info
-	m_lblBuild.SetWindowText(CString("Code by Shindo, build on " __DATE__ " " __TIME__));
+	m_lblBuild.SetWindowText(CString("Code by Shindo && SwimmingTiger, build on " __DATE__ " " __TIME__));
 
 	// set "view log" button style to command button
 	m_btnViewLog.SetHyperLinkExtendedStyle(HLINK_COMMANDBUTTON);
@@ -658,7 +708,8 @@ DWORD CMainDlg::CThreadStuDistConnect::Run()
 
 		try {
 			udp = new drcom_dealer_u62(str_mac_to_vec(CSTRING_TO_STD(dlg->m_szStoredMAC)), CSTRING_TO_STD(dlg->m_szStoredIP),
-				CSTRING_TO_STD(dlg->m_szStoredUserName), CSTRING_TO_STD(dlg->m_szStoredPassWord), "172.25.8.4", 61440, "EasyDrcomGUI", "for Win32, Core v0.9");
+				CSTRING_TO_STD(dlg->m_szStoredUserName), CSTRING_TO_STD(dlg->m_szStoredPassWord), CSTRING_TO_STD(dlg->m_szStoredAliveServerIP), 
+				dlg->m_nStoredAliveServerPort, CSTRING_TO_STD(dlg->m_szStoredAliveClientName), CSTRING_TO_STD(dlg->m_szStoredAliveClientVersion));
 		}
 		catch (std::exception& ex) {
 			U62_LOG_ERR(ex.what() << std::endl);
@@ -899,7 +950,8 @@ DWORD CMainDlg::CThreadWorkDistConnect::Run()
 		try {
 #define CSTRING_TO_STD(x) std::string(CT2CA(x))
 			udp = new drcom_dealer_u31(str_mac_to_vec(CSTRING_TO_STD(dlg->m_szStoredMAC)), CSTRING_TO_STD(dlg->m_szStoredIP),
-				CSTRING_TO_STD(dlg->m_szStoredUserName), CSTRING_TO_STD(dlg->m_szStoredPassWord), "172.25.8.4", 61440, "EasyDrcomGUI", "for Win32, Core v0.9");
+				CSTRING_TO_STD(dlg->m_szStoredUserName), CSTRING_TO_STD(dlg->m_szStoredPassWord), CSTRING_TO_STD(dlg->m_szStoredAliveServerIP),
+				dlg->m_nStoredAliveServerPort, CSTRING_TO_STD(dlg->m_szStoredAliveClientName), CSTRING_TO_STD(dlg->m_szStoredAliveClientVersion));
 #undef CSTRING_TO_STD
 		}
 		catch (std::exception&) {

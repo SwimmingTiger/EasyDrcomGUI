@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文(简体，中国) resources
+// Chinese (Simplified, PRC) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -27,6 +27,7 @@ LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\EasyDrcomGUI.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -53,8 +54,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,7,0,0
- PRODUCTVERSION 1,7,0,0
+ FILEVERSION 1,8,0,0
+ PRODUCTVERSION 1,8,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -70,12 +71,12 @@ BEGIN
         BLOCK "080404b0"
         BEGIN
             VALUE "FileDescription", "EasyDrcomGUI"
-            VALUE "FileVersion", "1.7.0.0"
+            VALUE "FileVersion", "1.8.0.0"
             VALUE "InternalName", "EasyDrcomGUI"
             VALUE "LegalCopyright", "Copyright 2016"
             VALUE "OriginalFilename", "EasyDrcomGUI.exe"
             VALUE "ProductName", "EasyDrcomGUI"
-            VALUE "ProductVersion", "1.7.0.0"
+            VALUE "ProductVersion", "1.8.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -137,12 +138,12 @@ BEGIN
     END
 END
 
-#endif    // 中文(简体，中国) resources
+#endif    // Chinese (Simplified, PRC) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英语(美国) resources
+// English (United States) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -172,7 +173,7 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-#endif    // 英语(美国) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
