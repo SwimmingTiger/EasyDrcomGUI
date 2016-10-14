@@ -2,24 +2,24 @@
 GUI Wrapper for **[EasyDrcom](https://github.com/coverxit/EasyDrcom)**, which is a 3rd Party Dr.COM Client for HITwh.
 
 ## 通用版 EasyDrcomGUI，简单配置后就可以适用于不同的学校
-* Windows版：v1.8，[点此下载](https://raw.githubusercontent.com/SwimmingTiger/EasyDrcomGUI/Win32/%E4%B8%8B%E8%BD%BD/EasyDrcomGUI.exe)
+* Windows版：v1.8，[点此下载](https://raw.githubusercontent.com/SwimmingTiger/EasyDrcomGUI/Win32/%E4%B8%8B%E8%BD%BD/EasyDrcomGUI-common-v1.8.zip)
 * 其他版本还没有编译
 
 ### 如何使用？
-* 首先运行程序，然后关掉。程序会生成配置文件（EasyDrcom.conf），用记事本打开它，你会看到如下内容：
+* 解开压缩包，用记事本打开 `EasyDrcomGUI` 目录里的 `EasyDrcom.conf`，你会看到如下内容：
 ```ini
 [General]
 Common.AliveServerIP=172.16.192.111
 Common.AliveServerPort=61440
 Common.AliveClientName=EasyDrcomGUI
-Common.AliveServerVersion=for Win32, Core v0.9
+Common.AliveClientVersion=for Win32, Core v0.9
 ```
 * 把其中的 `172.16.192.111` 改成自己学校的查流量网址的IP，保存。查流量网址就是会显示如下内容的网址：
 ```text
 已使用时间 Used time : 22161 Min
 已使用流量 Used flux : 3311.612 MByte
 ```
-* 重新打开程序，尝试连接。
+* 然后运行目录里的 `EasyDrcomGUI.exe`，尝试连接。
 * 如果遇到任何问题，请在此新建 issue 并把 EasyDrcom.log 的内容粘贴进去。
 
 ## 以下是原始项目的说明
